@@ -194,8 +194,9 @@ public class CommandHandler implements CommandExecutor{
 			}
 			Umfrage u = plugin.getUmfrage(args[1]);
 			if(u != null) {
-				if(sender.hasPermission("Veto.survey." + u.getPerm())) {
+				if(!sender.hasPermission("Veto.survey." + u.getPerm())) {
 					noPerms(sender, "Veto.survey." + u.getPerm());
+					return false;
 				}
 				if(!u.getStarted()) {
 					sender.sendMessage(ChatColor.RED + "Umfrage ist nicht gestartet!");
