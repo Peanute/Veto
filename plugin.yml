@@ -13,7 +13,7 @@ permissions:
     children:
       Veto.reload: true
       Veto.info: true
-      Veto.info.playerlist: true
+      Veto.info.pList: true
       Veto.help: true
       Veto.start: true
       Veto.end: true
@@ -39,7 +39,7 @@ permissions:
     children:
       Veto.reload: true
       Veto.info: true
-      Veto.info.playerlist: true
+      Veto.info.pList: true
       Veto.help: true
       Veto.start: true
       Veto.end: true
@@ -101,7 +101,7 @@ permissions:
   Veto.info:
     description: Allows you to view the loaded surveys.
     default: false
-  Veto.info.playerlist:
+  Veto.info.pList:
     description: Rechte zum anzeigen der Spieler, die bereits abgestimmt haben.
     default: false
   Veto.start:
