@@ -1,0 +1,175 @@
+name: Veto
+description: Survey Plugin made by MrSteakhouse
+main: com.mrsteakhouse.veto.Veto
+version: 1.0
+commands:
+  veto:
+    description: Base command of the plugin
+    usgage: /<command>
+permissions:
+  Veto.*:
+    description: Deprecated. Use Veto.all instead
+    default: false
+    children:
+      Veto.reload: true
+      Veto.info: true
+      Veto.info.playerlist: true
+      Veto.help: true
+      Veto.start: true
+      Veto.end: true
+      Veto.stat: true
+      Veto.vote: true
+      Veto.create: true
+      Veto.delete: true
+      Veto.list: true
+      Veto.edit: true
+      Veto.edit.topic: true
+      Veto.edit.perm: true
+      Veto.edit.end: true
+      Veto.edit.autooff: true
+      Veto.edit.add: true
+      Veto.edit.remove: true
+      Veto.edit.add.vote: true
+      Veto.edit.add.player: true
+      Veto.edit.remove.vote: true
+      Veto.edit.remove.player: true
+  Veto.all:
+    description: Allows everything.
+    default: op
+    children:
+      Veto.reload: true
+      Veto.info: true
+      Veto.info.playerlist: true
+      Veto.help: true
+      Veto.start: true
+      Veto.end: true
+      Veto.stat: true
+      Veto.vote: true
+      Veto.create: true
+      Veto.delete: true
+      Veto.list: true
+      Veto.edit: true
+      Veto.edit.topic: true
+      Veto.edit.perm: true
+      Veto.edit.end: true
+      Veto.edit.autooff: true
+      Veto.edit.add: true
+      Veto.edit.remove: true
+      Veto.edit.add.vote: true
+      Veto.edit.add.player: true
+      Veto.edit.remove.vote: true
+      Veto.edit.remove.player: true
+  Veto.base:
+    description: Group for standard permissions.
+    default: false
+    children:
+      Veto.help: true
+      Veto.info: true
+      Veto.stat: true
+      Veto.vote: true
+      Veto.list: true
+  Veto.edit.*:
+    description: Deprecated. Use Veto.edit.all instead
+    default: false
+    children:
+      Veto.edit.topic: true
+      Veto.edit.perm: true
+      Veto.edit.end: true
+      Veto.edit.autooff: true
+      Veto.edit.add.vote: true
+      Veto.edit.add.player: true
+      Veto.edit.remove.vote: true
+      Veto.edit.remove.player: true
+  Veto.edit.all:
+    description: Group for editing permissions.
+    default: false
+    children:
+      Veto.edit.topic: true
+      Veto.edit.perm: true
+      Veto.edit.end: true
+      Veto.edit.autooff: true
+      Veto.edit.add.vote: true
+      Veto.edit.add.player: true
+      Veto.edit.remove.vote: true
+      Veto.edit.remove.player: true
+  Veto.help:
+    description: Hilfe anzeige fuer das Plugin
+    default: false
+  Veto.reload:
+    description: Allows you to reload the config and the Polls.
+    default: false
+  Veto.info:
+    description: Allows you to view the loaded surveys.
+    default: false
+  Veto.info.playerlist:
+    description: Rechte zum anzeigen der Spieler, die bereits abgestimmt haben.
+    default: false
+  Veto.start:
+    description: Allows you to view the loaded surveys.
+    default: false
+  Veto.end:
+    description: Allows ending of surveys.
+    default: false
+  Veto.stat:
+    description: Allows you to view the statistics.
+    default: false
+  Veto.vote:
+    description: Allows to vote.
+    default: false
+  Veto.list:
+    description: Zeigt eine Liste der Umfragen an.
+    default: false
+  Veto.create:
+    description: Allows you to create surveys.
+    default: false
+  Veto.delete:
+    description: Allows you to delete surveys.
+    default: false
+  Veto.edit.topic:
+    description: Rights to change the topic.
+    default: false
+  Veto.edit.perm:
+    description: Rechte zum aender der Permissions einer Umfrage
+    default: false
+  Veto.edit.end:
+    description: Rights to change automatic ending date.
+    default: false
+  Veto.edit.autooff:
+    description: Allows to Change the automatic ending.
+    default: false
+  Veto.edit.add.*:
+    description: Deprecated. Use Veto.edit.add.all instead.
+    default: false
+    children:
+      Veto.edit.add.vote: true
+      Veto.edit.add.player: true
+  Veto.edit.remove.*:
+    description: Deprecated. Use Veto.edit.remove.all instead.
+    default: false
+    children:
+      Veto.edit.remove.vote: true
+      Veto.edit.remove.player: true
+  Veto.edit.add.all:
+    description: Global rights to add player or answers.
+    default: false
+    children:
+      Veto.edit.add.vote: true
+      Veto.edit.add.player: true
+  Veto.edit.remove.all:
+    description: Global rights to remove player or answers.
+    default: false
+    children:
+      Veto.edit.remove.vote: true
+      Veto.edit.remove.player: true
+  Veto.edit.add.vote:
+    description: Rights to add an answer.
+    default: false
+  Veto.edit.add.player:
+    description: Rights to add a player.
+    default: false
+  Veto.edit.remove.vote:
+    description: Rights to remove an answer.
+    default: false
+  Veto.edit.remove.player:
+    description: Rights to remove a player.
+    default: false
