@@ -50,6 +50,7 @@ permissions:
       Veto.list: true
       Veto.edit: true
       Veto.edit.topic: true
+      Veto.edit.mchoice: true
       Veto.edit.perm: true
       Veto.edit.end: true
       Veto.edit.autooff: true
@@ -130,6 +131,9 @@ permissions:
     default: false
   Veto.edit.perm:
     description: Rechte zum aender der Permissions einer Umfrage
+    default: false
+  Veto.edit.mchoice:
+    description: Rechte zum aendern des multiple choice.
     default: false
   Veto.edit.end:
     description: Rights to change automatic ending date.

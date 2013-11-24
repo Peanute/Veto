@@ -22,11 +22,12 @@ public class Umfrage {
 	private String estEnde;
 	private boolean autoEnd;
 	private String perm;
+	private boolean multipleChoice;
 	private List<String> playerList;
 	private NumberFormat nf = NumberFormat.getInstance();
 	
 	
-	public Umfrage(Veto plugin, String name, List<String> thema, Map<String, Object> votes, boolean started, String estEnde, boolean autoEnd, List<String> playerList, String perm) {
+	public Umfrage(Veto plugin, String name, List<String> thema, Map<String, Object> votes, boolean started, String estEnde, boolean autoEnd, List<String> playerList, String perm, boolean multipleChoice) {
 		this.name = name;
 		this.thema = thema;
 		this.votes = votes;
@@ -35,6 +36,7 @@ public class Umfrage {
 		this.estEnde = estEnde;
 		this.autoEnd = autoEnd;
 		this.playerList = playerList;
+		this.multipleChoice = multipleChoice;
 		nf.setMaximumFractionDigits(2);
 	}
 	
@@ -47,6 +49,7 @@ public class Umfrage {
 		this.estEnde = "01/01/1990 00:00";
 		this.autoEnd = false;
 		this.playerList = new ArrayList<String>();
+		this.multipleChoice = false;
 		nf.setMaximumFractionDigits(2);
 		
 	}
@@ -57,6 +60,19 @@ public class Umfrage {
 		String s = (String)sArray[answer-1];
 		Integer count = (Integer)votes.get(s)+1;
 		votes.put(s, count);
+		playerList.add(name);
+		return true;
+	}
+	
+	public boolean addMulVote(Integer[] answers, String name) {
+		if(playerList.contains(name)) { return false;}
+		
+		Object[] sArray = votes.keySet().toArray();
+		for(Integer answer : answers) {
+			String s = (String)sArray[answer-1];
+			Integer count = (Integer)votes.get(s)+1;
+			votes.put(s, count);
+		}
 		playerList.add(name);
 		return true;
 	}
@@ -79,6 +95,7 @@ public class Umfrage {
 		sender.sendMessage(ChatColor.YELLOW + "Gestartet: " + (started ? "Ja" : "Nein"));
 		sender.sendMessage(ChatColor.YELLOW + "Endet am: " + estEnde);
 		sender.sendMessage(ChatColor.YELLOW + "Autom. Ende: " + (autoEnd ? "Ja" : "Nein"));
+		sender.sendMessage(ChatColor.YELLOW + "Multiple Choice: " + (multipleChoice ? "Ja" : "Nein"));
 		sender.sendMessage(ChatColor.YELLOW + "Permissions: " + perm);
 		if(sender instanceof Player) { sender.sendMessage(ChatColor.RED + "Du hast " + (playerList.contains(sender.getName()) ? "bereits" : "noch nicht") + " abgestimmt."); }
 	}
@@ -94,7 +111,7 @@ public class Umfrage {
 			sender.sendMessage(ChatColor.AQUA.toString() + i + ". : " + s + ": " + votes.get(s) + " (" + nf.format(Double.valueOf((Integer)votes.get(s)) / Double.valueOf(countVotes()) * 100.0D) + "%)");
 			i++;
 		}
-		sender.sendMessage(ChatColor.YELLOW + "Es " + (countVotes()<1?"hat":"haben") + " insgesamt " + countVotes() + " Spieler abgestimmt.");
+		sender.sendMessage(ChatColor.YELLOW + "Es wurde insgesamt " + countVotes() + " mal abgestimmt.");
 	}
 	
 	public void printPlayerlist(CommandSender sender) {
@@ -165,4 +182,13 @@ public class Umfrage {
 	public void setPerm(String perm) {
 		this.perm = perm;
 	}
+	
+	public void setMulChoice(boolean mChoice) {
+		this.multipleChoice = mChoice;
+	}
+	
+	public boolean getMulChoice() {
+		return multipleChoice;
+	}
+	
 }

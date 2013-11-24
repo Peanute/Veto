@@ -3,11 +3,10 @@ default:
   - test
   - test
   - test
-  votes:
-    test1: 1
-    test2: 2
+  votes: {}
   started: false
   estEnde: 01/01/1990 00:00
   auto-end: false
+  mul-choice: false
   perm: all
   player: []

@@ -78,6 +78,7 @@ public class Veto extends JavaPlugin{
 			cs.set("started", u.getStarted());
 			cs.set("estEnde", u.getestEnde());
 			cs.set("auto-end", u.getAutoEnd());
+			cs.set("mul-choice", u.getMulChoice());
 			cs.set("perm", u.getPerm());
 			cs.set("player", u.getPlayerList());
 			try {
@@ -111,11 +112,11 @@ public class Veto extends JavaPlugin{
 			String perm = cs.getString("perm");
 			List<String> topic = cs.getStringList("topic");
 			List<String> playerList = cs.getStringList("player");
+			boolean mulChoice = cs.getBoolean("mul-choice");
 			Map<String, Object> votes = cs.getConfigurationSection("votes").getValues(false);
 
-			Umfrage temp = new Umfrage(this, name, topic, votes, started, estEnde, uautoEnd, playerList, perm);
+			Umfrage temp = new Umfrage(this, name, topic, votes, started, estEnde, uautoEnd, playerList, perm, mulChoice);
 			UmfrageList.add(temp);
-			
 		}
 		return true;
 	}
@@ -208,6 +209,13 @@ public class Veto extends JavaPlugin{
 		Umfrage u = getUmfrage(name);
 		if(u != null) {
 			u.setPerm(perm);
+		}
+	}
+	
+	public void editMulChoice(String name, boolean mulChoice) {
+		Umfrage u = getUmfrage(name);
+		if(u != null) {
+			u.setMulChoice(mulChoice);
 		}
 	}
 	
