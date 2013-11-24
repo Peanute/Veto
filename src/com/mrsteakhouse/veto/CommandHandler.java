@@ -284,6 +284,7 @@ public class CommandHandler implements CommandExecutor{
 					if(!player.hasPermission("Veto.edit.mchoice")) { noPerms(player, "Veto.edit.mchoice"); return false; }
 					if(!player.hasPermission("Veto.survey." + u.getPerm())) { noPerms(player, "Veto.survey." + u.getPerm()); return false; }
 					plugin.editMulChoice(u.getName(), Boolean.valueOf(args[3]));
+					sender.sendMessage(ChatColor.GREEN + "Multiple Choice wurde geändert.");
 					return true;
 				}
 				notFound(player, args[2]);
