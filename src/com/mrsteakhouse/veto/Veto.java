@@ -34,7 +34,7 @@ public class Veto extends JavaPlugin{
 			e.printStackTrace();
 		}
 		loadUmfragen();
-		Bukkit.getLogger().log(Level.INFO,"[Veto] " + UmfrageList.size() + " surveys loaded!");
+		Bukkit.getLogger().log(Level.INFO,"[Veto] " + UmfrageList.size() + " Umfragen geladen!");
 		
 		getCommand("veto").setExecutor(new CommandHandler(this));
 		Bukkit.getScheduler().scheduleAsyncRepeatingTask(this, new Scheduler(this, UmfrageList), 120L, 18000L);
@@ -94,7 +94,7 @@ public class Veto extends JavaPlugin{
 		
 		if(!folder.exists()) {
 			folder.mkdir();
-			Bukkit.getLogger().log(Level.INFO, "No polls found in this folder!");
+			Bukkit.getLogger().log(Level.INFO, "Keine Umfragen in diesem Ordner vorhanden!");
 			return false;
 		}
 		

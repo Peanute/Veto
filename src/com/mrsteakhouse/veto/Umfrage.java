@@ -207,9 +207,16 @@ public class Umfrage {
 		plugin.reload();
 	}
 	
-	public void editVoteRemove(String name, String key) {
-		votes.remove(key);
-		plugin.reload();
+	public boolean editVoteRemove(Integer key) {
+		int i = 1;
+		for(String s : votes.keySet()) {
+			if(i==key) {
+				votes.remove(s);
+				return true;
+			}
+			i++;
+		}
+		return false;
 	}
 	
 	public boolean editPlayerRemove(String name, String player) {
@@ -219,20 +226,37 @@ public class Umfrage {
 		return true;
 	}
 	
-	public void editTopic(String name, String topic, Integer line) {
+	public void editTopic(String topic, Integer line) {
 		line-=1;
 		if(topic.equals("")) {
-			thema.set(line, topic);
-			thema.remove((int)line);
+			if(thema.size()>line) {
+				thema.set(line, "");
+				thema.remove((int)line);
+			} else {
+				line = thema.size()-1;
+				thema.set(line, "");
+				thema.remove((int)line);
+			}
 			plugin.reload();
 			return;
 		}
 		if(!(thema.size()<=line)) {
 			thema.set(line, topic);
-			plugin.reload();
 		} else {
 			thema.add(topic);
-			plugin.reload();
 		}
+		plugin.reload();
+	}
+	
+	public boolean editVoteCount(Integer key, Integer count) {
+		int i = 1;
+		for(String s : votes.keySet()) {
+			if(i==key) {
+				votes.put(s, count);
+				return true;
+			}
+			i++;
+		}
+		return false;
 	}
 }

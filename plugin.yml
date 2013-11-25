@@ -27,12 +27,14 @@ permissions:
       Veto.edit.perm: true
       Veto.edit.end: true
       Veto.edit.autooff: true
-      Veto.edit.add: true
-      Veto.edit.remove: true
-      Veto.edit.add.vote: true
-      Veto.edit.add.player: true
-      Veto.edit.remove.vote: true
-      Veto.edit.remove.player: true
+      Veto.edit.vote: true
+      Veto.edit.player: true
+      Veto.edit.vote.add: true
+      Veto.edit.vote.remove: true
+      Veto.edit.vote.count: true
+      Veto.edit.player.add: true
+      Veto.edit.player.remove: true
+      
   Veto.all:
     description: Allows everything.
     default: op
@@ -54,12 +56,14 @@ permissions:
       Veto.edit.perm: true
       Veto.edit.end: true
       Veto.edit.autooff: true
-      Veto.edit.add: true
-      Veto.edit.remove: true
-      Veto.edit.add.vote: true
-      Veto.edit.add.player: true
-      Veto.edit.remove.vote: true
-      Veto.edit.remove.player: true
+      Veto.edit.vote: true
+      Veto.edit.player: true
+      Veto.edit.vote.add: true
+      Veto.edit.vote.remove: true
+      Veto.edit.vote.count: true
+      Veto.edit.player.add: true
+      Veto.edit.player.remove: true
+      
   Veto.base:
     description: Group for standard permissions.
     default: false
@@ -69,6 +73,7 @@ permissions:
       Veto.stat: true
       Veto.vote: true
       Veto.list: true
+      
   Veto.edit.*:
     description: Deprecated. Use Veto.edit.all instead
     default: false
@@ -81,6 +86,7 @@ permissions:
       Veto.edit.add.player: true
       Veto.edit.remove.vote: true
       Veto.edit.remove.player: true
+      
   Veto.edit.all:
     description: Group for editing permissions.
     default: false
@@ -93,87 +99,116 @@ permissions:
       Veto.edit.add.player: true
       Veto.edit.remove.vote: true
       Veto.edit.remove.player: true
-  Veto.help:
-    description: Hilfe anzeige fuer das Plugin
-    default: false
-  Veto.reload:
-    description: Allows you to reload the config and the Polls.
-    default: false
-  Veto.info:
-    description: Allows you to view the loaded surveys.
-    default: false
-  Veto.info.pList:
-    description: Rechte zum anzeigen der Spieler, die bereits abgestimmt haben.
-    default: false
-  Veto.start:
-    description: Allows you to view the loaded surveys.
-    default: false
-  Veto.end:
-    description: Allows ending of surveys.
-    default: false
-  Veto.stat:
-    description: Allows you to view the statistics.
-    default: false
-  Veto.vote:
-    description: Allows to vote.
-    default: false
-  Veto.list:
-    description: Zeigt eine Liste der Umfragen an.
-    default: false
-  Veto.create:
-    description: Allows you to create surveys.
-    default: false
-  Veto.delete:
-    description: Allows you to delete surveys.
-    default: false
-  Veto.edit.topic:
-    description: Rights to change the topic.
-    default: false
-  Veto.edit.perm:
-    description: Rechte zum aender der Permissions einer Umfrage
-    default: false
-  Veto.edit.mchoice:
-    description: Rechte zum aendern des multiple choice.
-    default: false
-  Veto.edit.end:
-    description: Rights to change automatic ending date.
-    default: false
-  Veto.edit.autooff:
-    description: Allows to Change the automatic ending.
-    default: false
-  Veto.edit.add.*:
-    description: Deprecated. Use Veto.edit.add.all instead.
-    default: false
-    children:
-      Veto.edit.add.vote: true
-      Veto.edit.add.player: true
-  Veto.edit.remove.*:
-    description: Deprecated. Use Veto.edit.remove.all instead.
-    default: false
-    children:
-      Veto.edit.remove.vote: true
-      Veto.edit.remove.player: true
-  Veto.edit.add.all:
-    description: Global rights to add player or answers.
-    default: false
-    children:
-      Veto.edit.add.vote: true
-      Veto.edit.add.player: true
-  Veto.edit.remove.all:
+      
+  Veto.edit.vote.*:
     description: Global rights to remove player or answers.
     default: false
     children:
-      Veto.edit.remove.vote: true
-      Veto.edit.remove.player: true
-  Veto.edit.add.vote:
+      Veto.edit.vote.add: true
+      Veto.edit.vote.remove: true
+      Veto.edit.vote.count: true
+      
+  Veto.edit.vote.all:
+    description: add und remove fuer vote erlauben
+    default: false
+    children:
+      Veto.edit.vote.add: true
+      Veto.edit.vote.remove: true
+      
+  Veto.edit.player.*:
+    description: Deprecated. Use Veto.edit.player.all instead.
+    default: false
+    children:
+      Veto.edit.player.remove: true
+      Veto.edit.player.remove: true
+      
+  Veto.edit.player.all:
+    description: Global rights to add player or answers.
+    default: false
+    children:
+      Veto.edit.player.add: true
+      Veto.edit.player.remove: true
+      
+  Veto.help:
+    description: Hilfe anzeige fuer das Plugin
+    default: false
+    
+  Veto.reload:
+    description: Allows you to reload the config and the Polls.
+    default: false
+    
+  Veto.info:
+    description: Allows you to view the loaded surveys.
+    default: false
+    
+  Veto.info.pList:
+    description: Rechte zum anzeigen der Spieler, die bereits abgestimmt haben.
+    default: false
+    
+  Veto.start:
+    description: Allows you to view the loaded surveys.
+    default: false
+    
+  Veto.end:
+    description: Allows ending of surveys.
+    default: false
+    
+  Veto.stat:
+    description: Allows you to view the statistics.
+    default: false
+    
+  Veto.vote:
+    description: Allows to vote.
+    default: false
+    
+  Veto.list:
+    description: Zeigt eine Liste der Umfragen an.
+    default: false
+    
+  Veto.create:
+    description: Allows you to create surveys.
+    default: false
+    
+  Veto.delete:
+    description: Allows you to delete surveys.
+    default: false
+    
+  Veto.edit.topic:
+    description: Rights to change the topic.
+    default: false
+    
+  Veto.edit.perm:
+    description: Rechte zum aender der Permissions einer Umfrage
+    default: false
+    
+  Veto.edit.mchoice:
+    description: Rechte zum aendern des multiple choice.
+    default: false
+    
+  Veto.edit.end:
+    description: Rights to change automatic ending date.
+    default: false
+    
+  Veto.edit.autooff:
+    description: Allows to Change the automatic ending.
+    default: false
+      
+  Veto.edit.vote.add:
     description: Rights to add an answer.
     default: false
-  Veto.edit.add.player:
-    description: Rights to add a player.
-    default: false
-  Veto.edit.remove.vote:
+    
+  Veto.edit.vote.remove:
     description: Rights to remove an answer.
     default: false
-  Veto.edit.remove.player:
+    
+  Veto.edit.vote.count:
+    description: rechte zum aendern der votes-anzahl
+    default: false
+    
+  Veto.edit.player.add:
+    description: Rights to add a player.
+    default: false
+    
+  Veto.edit.player.remove:
     description: Rights to remove a player.
     default: false
