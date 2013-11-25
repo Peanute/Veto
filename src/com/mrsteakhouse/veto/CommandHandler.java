@@ -22,7 +22,7 @@ public class CommandHandler implements CommandExecutor{
 			return false;
 		}
 		if(args.length == 0) {
-			showHelp(sender);
+			showHelp(sender, "all");
 			return true;
 		}
 		
@@ -31,7 +31,7 @@ public class CommandHandler implements CommandExecutor{
 				noPerms(sender, "Veto.help");
 				return false;
 			}
-			showHelp(sender);
+			showHelp(sender, "all");
 			return true;
 		}
 		
@@ -69,21 +69,23 @@ public class CommandHandler implements CommandExecutor{
 				return true;
 			}
 			notFound(sender, args[1]);
+			showHelp(sender, "info");
 			return true;
 		}
 		
-		if(args.length == 3 && args[0].equalsIgnoreCase("info") && args[1].equalsIgnoreCase("playerlist")) {
+		if(args.length == 2 && args[0].equalsIgnoreCase("playerlist")) {
 			if(!sender.hasPermission("Veto.info.pList")) {
 				noPerms(sender, "Veto.info.pList");
 				return false;
 			}
-			Umfrage u = plugin.getUmfrage(args[2]);
+			Umfrage u = plugin.getUmfrage(args[1]);
 			if(u != null) {
 				if(!sender.hasPermission("Veto.survey." + u.getPerm())) { noPerms(sender, "Veto.survey." + u.getPerm()); return false; }
 				u.printPlayerlist(sender);
 				return true;
 			}
-			notFound(sender, args[2]);
+			notFound(sender, args[1]);
+			showHelp(sender, "pl");
 			return false;
 		}
 		
@@ -127,6 +129,7 @@ public class CommandHandler implements CommandExecutor{
 				return true;
 			}
 			notFound(sender, args[1]);
+			showHelp(sender, "start");
 			return true;
 		}
 		
@@ -145,6 +148,7 @@ public class CommandHandler implements CommandExecutor{
 				return true;
 			}
 			notFound(sender, args[1]);
+			showHelp(sender, "end");
 			return true;
 		}
 		
@@ -171,15 +175,7 @@ public class CommandHandler implements CommandExecutor{
 				return true;
 			}
 			notFound(sender, args[1]);
-			return true;
-		}
-		
-		if(args.length==1 && args[0].equalsIgnoreCase("stat")) {
-			if(sender.hasPermission("Veto.stat")) {
-				noPerms(sender, "Veto.stat");
-				return false;
-			}
-			showHelp(sender);
+			showHelp(sender, "stat");
 			return true;
 		}
 		
@@ -221,6 +217,7 @@ public class CommandHandler implements CommandExecutor{
 				return true;
 			}
 			notFound(sender, args[1]);
+			showHelp(sender, "vote");
 			return false;
 		}
 		
@@ -244,11 +241,15 @@ public class CommandHandler implements CommandExecutor{
 				return true;
 			}
 			notFound(player, args[1]);
+			showHelp(sender, "delete");
+			return false;
 		}
 		if(args.length > 2 && args[0].equalsIgnoreCase("edit")) {
 			if(!(sender instanceof Player)) { noConsole(sender); return false;}
 			if(!player.hasPermission("Veto.edit")) { noPerms(player, "Veto.edit"); return false; }
 			if(args[1].equalsIgnoreCase("topic")) {
+				if(args[3].equalsIgnoreCase("\"")) {
+				}
 				Umfrage u = plugin.getUmfrage(args[2]);
 				if(u != null) {
 					if(!player.hasPermission("Veto.edit.topic")) { noPerms(player, "Veto.edit.topic"); return false; }
@@ -258,11 +259,12 @@ public class CommandHandler implements CommandExecutor{
 					for(i=4;!args[i].equals("\"");i++) {
 						str = str.concat(args[i] + " ");
 					}
-					plugin.editTopic(args[2], str, Integer.valueOf(args[i+1]));
-					player.sendMessage(ChatColor.GREEN + "Topic changed.");
+					u.editTopic(args[2], str, Integer.valueOf(args[i+1]));
+					player.sendMessage(ChatColor.GREEN + "Thema geändert.");
 					return true;
 				}
 				notFound(sender, args[2]);
+				showHelp(sender, "edit-topic");
 				return true;
 			}
 			if(args[1].equalsIgnoreCase("perm")) {
@@ -270,11 +272,12 @@ public class CommandHandler implements CommandExecutor{
 				if(u != null) {
 					if(!player.hasPermission("Veto.edit.perm")) { noPerms(player, "Veto.edit.perm"); return false; }
 					if(!player.hasPermission("Veto.survey." + u.getPerm())) { noPerms(player, "Veto.survey." + u.getPerm()); return false; }
-					plugin.editPerm(args[2], args[3]);
+					u.setPerm(args[3]);
 					player.sendMessage(ChatColor.GREEN + "Neue Rechte gesetzt.");
 					return true;
 				}
 				notFound(player, args[2]);
+				showHelp(sender, "edit-perm");
 				return true;
 			}
 			
@@ -283,11 +286,25 @@ public class CommandHandler implements CommandExecutor{
 				if(u != null) {
 					if(!player.hasPermission("Veto.edit.mchoice")) { noPerms(player, "Veto.edit.mchoice"); return false; }
 					if(!player.hasPermission("Veto.survey." + u.getPerm())) { noPerms(player, "Veto.survey." + u.getPerm()); return false; }
-					plugin.editMulChoice(u.getName(), Boolean.valueOf(args[3]));
+					u.setMulChoice(Boolean.valueOf(args[3]));
 					sender.sendMessage(ChatColor.GREEN + "Multiple Choice wurde geändert.");
 					return true;
 				}
 				notFound(player, args[2]);
+				showHelp(sender, "edit-mc");
+				return true;
+			}
+			
+			if(args[1].equalsIgnoreCase("ao")) {
+				Umfrage u = plugin.getUmfrage(args[2]);
+				if(u != null) {
+					if(!player.hasPermission("Veto.edit.autooff")) { noPerms(player, "Veto.edit.autooff"); return false; }
+					if(!player.hasPermission("Veto.survey." + u.getPerm())) { noPerms(player, "Veto.survey." + u.getPerm()); return false; }
+					u.setAutoEnd(Boolean.valueOf(args[3]));
+					return true;
+				}
+				notFound(player, args[2]);
+				showHelp(sender, "edit-ao");
 				return true;
 			}
 			
@@ -303,14 +320,15 @@ public class CommandHandler implements CommandExecutor{
 							str = str.concat(args[i] + " ");
 						}
 					}
-					plugin.editEnde(args[2], str);
-					player.sendMessage(ChatColor.GREEN + "Date changed.");
+					u.setEnde(str);
+					player.sendMessage(ChatColor.GREEN + "Datum geändert.");
 					return true;
 				}
 				notFound(player, args[2]);
+				showHelp(sender, "edit-enddate");
 				return true;
 			}
-			if(args.length > 3 &&args[1].equalsIgnoreCase("add")) {
+			if(args.length > 3 &&args[1].equalsIgnoreCase("-a")) {
 				if(!player.hasPermission("Veto.edit.add")) { noPerms(player, "Veto.edit.add"); return false; }
 				if(args[2].equalsIgnoreCase("vote")) {
 					Umfrage u = plugin.getUmfrage(args[3]);
@@ -322,11 +340,12 @@ public class CommandHandler implements CommandExecutor{
 						for(i=3;args.length>i;i++) {
 							str = str.concat(args[i] + " ");
 						}
-						plugin.addVote(args[3], str);
+						u.editVoteAdd(str, Integer.valueOf(args[3]));
 						player.sendMessage(ChatColor.GREEN + "Antwort hinzugefügt.");
 						return true;
 					}
 					notFound(sender, args[3]);
+					showHelp(sender, "edit-vote-a");
 					return true;
 				}
 				if(args[2].equalsIgnoreCase("player")) {
@@ -334,7 +353,7 @@ public class CommandHandler implements CommandExecutor{
 					if(u != null) {
 						if(!player.hasPermission("Veto.edit.add.player")) { noPerms(player, "Veto.edit.add.player"); return false; }
 						if(!player.hasPermission("Veto.survey." + u.getPerm())) { noPerms(sender, "Veto.survey." + u.getPerm()); return false; }
-						if(plugin.addPlayer(args[3],args[4])) {
+						if(u.addPlayer(args[4])) {
 							player.sendMessage(ChatColor.GREEN + "Spieler hinzugefügt.");
 						} else {
 							player.sendMessage(ChatColor.GREEN + "Spieler ist bereits in Liste vorhanden.");
@@ -342,10 +361,11 @@ public class CommandHandler implements CommandExecutor{
 						return true;
 					}
 					notFound(player, args[3]);
+					showHelp(sender, "edit-player-a");
 					return true;
 				}
 			}
-			if(args[1].equalsIgnoreCase("remove")) {
+			if(args[1].equalsIgnoreCase("-r")) {
 				if(!player.hasPermission("Veto.edit.remove")) { noPerms(player, "Veto.edit.remove"); return false; }
 				if(args[2].equalsIgnoreCase("vote")) {
 					Umfrage u = plugin.getUmfrage(args[3]);
@@ -357,11 +377,12 @@ public class CommandHandler implements CommandExecutor{
 						for(i=5;!args[i].equals("\"");i++) {
 							vote = vote.concat(args[i] + " ");
 						}
-						plugin.removeVote(args[3], vote);
+						u.editVoteRemove(args[3], vote);
 						player.sendMessage(ChatColor.GREEN + "Antwort entfernt.");
 						return true;
 					}
 					notFound(player, args[3]);
+					showHelp(sender, "edit-vote-r");
 					return true;
 				}
 				if(args[2].equalsIgnoreCase("player")) {
@@ -369,7 +390,7 @@ public class CommandHandler implements CommandExecutor{
 					if(u != null) {
 						if(!player.hasPermission("Veto.edit.remove.player")) { noPerms(player, "Veto.edit.remove.player"); return false; }
 						if(!player.hasPermission("Veto.survey." + u.getPerm())) { noPerms(sender, "Veto.survey." + u.getPerm()); return false; }
-						if(plugin.removePlayer(args[3], args[4])) {
+						if(u.editPlayerRemove(args[3], args[4])) {
 							player.sendMessage(ChatColor.GREEN + "Spieler entfernt.");
 						} else {
 							player.sendMessage(ChatColor.GREEN + "Spieler ist nicht in Liste vorhanden.");
@@ -377,6 +398,7 @@ public class CommandHandler implements CommandExecutor{
 						return true;
 					}
 					notFound(player, args[3]);
+					showHelp(sender, "edit-player-r");
 					return true;
 				}
 			}
@@ -401,27 +423,29 @@ public class CommandHandler implements CommandExecutor{
 		sender.sendMessage(ChatColor.RED + "Dieser Befehl kann nur von Spielern benutzt werden!");
 	}
 	
-	public void showHelp(CommandSender sender) {
-		sender.sendMessage(ChatColor.BLUE + "Dies ist die Hilfe für das Veto-Plugin");
-		sender.sendMessage(ChatColor.GRAY + "(Es werden nur die Befehle für deine Rechte angezeigt)");
-		sender.sendMessage(ChatColor.AQUA + "/veto:" + ChatColor.GOLD + " Basis Befehl.");
-		if(sender.hasPermission("Veto.reload")) { sender.sendMessage(ChatColor.AQUA + "/veto reload:" + ChatColor.GOLD + " Lädt die config und die Umfragen aus dem angegebenen Ordner manuell neu."); }
-		if(sender.hasPermission("Veto.info")) { sender.sendMessage(ChatColor.AQUA + "/veto info:" + ChatColor.GOLD + " Zeigt die aktuell geladenen Umfragen an. " + ChatColor.RED + "Rot" + ChatColor.GOLD +" = nicht gestartet, " + ChatColor.GREEN + "Grün" +ChatColor.GOLD + " = gestartet."); }
-		if(sender.hasPermission("Veto.info.pList")) { sender.sendMessage(ChatColor.AQUA + "/veto info playerlist <Umfrage>:" + ChatColor.GOLD + " Zeigt die Spieler an, welche bereits agestimmt haben."); }
-		if(sender.hasPermission("Veto.list")) { sender.sendMessage(ChatColor.AQUA + "/veto list:" + ChatColor.GOLD + " Zeigt eine Liste der Umfragen mit der ersten Zeile des Themas."); }
-		if(sender.hasPermission("Veto.vote")) { sender.sendMessage(ChatColor.AQUA + "/veto vote <Umfrage> <Nummer>:" + ChatColor.GOLD + " Für eine Umfrage abstimmen. Die Nummer ist der Index der Frage."); }
-		if(sender.hasPermission("Veto.start")) { sender.sendMessage(ChatColor.AQUA + "/veto start <Umfrage>:" + ChatColor.GOLD + " Startet eine Umfrage."); }
-		if(sender.hasPermission("Veto.end")) { sender.sendMessage(ChatColor.AQUA + "/veto end <Umfrage>:" + ChatColor.GOLD + " Beendet eine Umfrage."); }
-		if(sender.hasPermission("Veto.create")) { sender.sendMessage(ChatColor.AQUA + "/veto create <Umfrage> <Permission>:" + ChatColor.GOLD + " Erstellt eine Umfrage mit dem Name und den Rechten."); }
-		if(sender.hasPermission("Veto.delete")) { sender.sendMessage(ChatColor.AQUA + "/veto delete <Umfrage>:" + ChatColor.GOLD + " Löscht eine Umfrage."); }
-		if(sender.hasPermission("Veto.edit.mchoice")) { sender.sendMessage(ChatColor.AQUA + "/veto edit mc <Umfrage> <true/false>:" + ChatColor.GOLD + " Ändert die multiple choice Funktion einer Umfrage."); }
-		if(sender.hasPermission("Veto.edit.topic")) { sender.sendMessage(ChatColor.AQUA + "/veto edit topic <Umfrage> \" <Thema> \" <Zeile>:" + ChatColor.GOLD + " Ändert das Thema in der gewünschten Zeile."); }
-		if(sender.hasPermission("Veto.edit.perm")) { sender.sendMessage(ChatColor.AQUA + "/veto edit perm <Umfrage> <Permission>" + ChatColor.GOLD + " Ändert die benötigten Permissions"); }
-		if(sender.hasPermission("Veto.edit.end")) { sender.sendMessage(ChatColor.AQUA + "/veto edit end <Umfrage> \" <Datum> \":" + ChatColor.GOLD + " Ändert das Datum für das Automatische Beenden."); }
-		if(sender.hasPermission("Veto.edit.autooff")) { sender.sendMessage(ChatColor.AQUA + "/veto edit autooff <Umfrage> <true/false>:" + ChatColor.GOLD + " Automatisches Ende ein bzw. ausschalten."); }
-		if(sender.hasPermission("Veto.edit.add.vote")) { sender.sendMessage(ChatColor.AQUA + "/veto edit add vote <Umfrage> <Antowrt>:" + ChatColor.GOLD + " Erstellt eine Antwort in einer Umfrage."); }
-		if(sender.hasPermission("Veto.edit.remove.vote")) { sender.sendMessage(ChatColor.AQUA + "/veto edit remove vote <Umfrage> \" <Antwort> \":" + ChatColor.GOLD + " Löscht eine Anwort."); }
-		if(sender.hasPermission("Veto.edit.add.player")) { sender.sendMessage(ChatColor.AQUA + "/veto edit add player <Umfrage> <Name>:" + ChatColor.GOLD + " Fügt einen Spieler zur Spielerliste einer Umfrage hinzu."); }
-		if(sender.hasPermission("Veto.edit.remove.player")) { sender.sendMessage(ChatColor.AQUA + "/veto edit remove player <Umfrage> <Name>:" + ChatColor.GOLD + " Löscht einene Spieler aus der Spielerliste einer Umfrage."); }
+	public void showHelp(CommandSender sender, String cmd) {
+		if(cmd.equals("all")) { sender.sendMessage(ChatColor.BOLD + "Dies ist die Hilfe für das Veto-Plugin"); }
+		if(cmd.equals("all")) { sender.sendMessage(ChatColor.GRAY + "(Es werden nur die Befehle für deine Rechte angezeigt)"); }
+		if(cmd.equals("all")) { sender.sendMessage(ChatColor.AQUA + "/veto:" + ChatColor.GOLD + " Basis Befehl."); }
+		if(sender.hasPermission("Veto.reload") && cmd.equals("all")) { sender.sendMessage(ChatColor.AQUA + "/veto reload:" + ChatColor.GOLD + " Lädt die config und die Umfragen aus dem angegebenen Ordner manuell neu."); }
+		if(sender.hasPermission("Veto.info") && cmd.equals("all")) { sender.sendMessage(ChatColor.AQUA + "/veto info:" + ChatColor.GOLD + " Zeigt die aktuell geladenen Umfragen an. " + ChatColor.RED + "Rot" + ChatColor.GOLD +" = nicht gestartet, " + ChatColor.GREEN + "Grün" +ChatColor.GOLD + " = gestartet."); }
+		if(sender.hasPermission("Veti.info") && (cmd.equals("all") || cmd.equals("info"))) { sender.sendMessage(ChatColor.AQUA + "/veto info <Umfrage>:" + ChatColor.GOLD + " Zeigt die Details der Umfrage an."); }
+		if(sender.hasPermission("Veto.info.pList") && (cmd.equals("all") || cmd.equals("pl"))) { sender.sendMessage(ChatColor.AQUA + "/veto playerlist <Umfrage>:"  + ChatColor.GOLD + " Zeigt die Spieler an, welche bereits agestimmt haben."); }
+		if(sender.hasPermission("Veto.list") && cmd.equals("all")) { sender.sendMessage(ChatColor.AQUA + "/veto list:" + ChatColor.GOLD + " Zeigt eine Liste der Umfragen mit der ersten Zeile des Themas."); }
+		if(sender.hasPermission("Veto.stat") && (cmd.equals("all") || cmd.equals("stat"))) { sender.sendMessage(ChatColor.AQUA + "/veto stat <Umfrage>:" + ChatColor.GOLD + " Zeigt die Statistik der Umfrage."); }
+		if(sender.hasPermission("Veto.vote") && (cmd.equals("all") || cmd.equals("vote"))) { sender.sendMessage(ChatColor.AQUA + "/veto vote <Umfrage> <Nummer>:" + ChatColor.GOLD + " Für eine Umfrage abstimmen. Die Nummer ist der Index der Frage. Wenn Multiple Choice an ist, dann müssen mehere Indizes angegeben werden."); }
+		if(sender.hasPermission("Veto.start") && (cmd.equals("all") || cmd.equals("start"))) { sender.sendMessage(ChatColor.AQUA + "/veto start <Umfrage>:" + ChatColor.GOLD + " Startet eine Umfrage."); }
+		if(sender.hasPermission("Veto.end") && (cmd.equals("all") || cmd.equals("end"))) { sender.sendMessage(ChatColor.AQUA + "/veto end <Umfrage>:" + ChatColor.GOLD + " Beendet eine Umfrage."); }
+		if(sender.hasPermission("Veto.create") && (cmd.equals("all") || cmd.equals("create"))) { sender.sendMessage(ChatColor.AQUA + "/veto create <Umfrage> <Permission>:" + ChatColor.GOLD + " Erstellt eine Umfrage mit dem Name und den Rechten."); }
+		if(sender.hasPermission("Veto.delete") && (cmd.equals("all") || cmd.equals("delete"))) { sender.sendMessage(ChatColor.AQUA + "/veto delete <Umfrage>:" + ChatColor.GOLD + " Löscht eine Umfrage."); }
+		if(sender.hasPermission("Veto.edit.mchoice") && (cmd.equals("all") || cmd.equals("edit-mc"))) { sender.sendMessage(ChatColor.AQUA + "/veto edit mc <Umfrage> <true/false>:" + ChatColor.GOLD + " Ändert die multiple choice Funktion einer Umfrage."); }
+		if(sender.hasPermission("Veto.edit.topic") && (cmd.equals("all") || cmd.equals("edit-topic"))) { sender.sendMessage(ChatColor.AQUA + "/veto edit topic <Umfrage> \" <Thema> \" <Zeile>:" + ChatColor.GOLD + " Ändert das Thema in der gewünschten Zeile."); }
+		if(sender.hasPermission("Veto.edit.perm") && (cmd.equals("all") || cmd.equals("edit-perm"))) { sender.sendMessage(ChatColor.AQUA + "/veto edit perm <Umfrage> <Permission>" + ChatColor.GOLD + " Ändert die benötigten Permissions"); }
+		if(sender.hasPermission("Veto.edit.end") && (cmd.equals("all") || cmd.equals("edit-enddate"))) { sender.sendMessage(ChatColor.AQUA + "/veto edit end <Umfrage> \" <Datum> \":" + ChatColor.GOLD + " Ändert das Datum für das Automatische Beenden."); }
+		if(sender.hasPermission("Veto.edit.autooff") && (cmd.equals("all") || cmd.equals("edit-ao"))) { sender.sendMessage(ChatColor.AQUA + "/veto edit ao <Umfrage> <true/false>:" + ChatColor.GOLD + " Automatisches Ende ein bzw. ausschalten."); }
+		if(sender.hasPermission("Veto.edit.add.vote") && (cmd.equals("all") || cmd.equals("edit-vote-a"))) { sender.sendMessage(ChatColor.AQUA + "/veto edit -a vote <Umfrage> <Antowrt>:" + ChatColor.GOLD + " Erstellt eine Antwort in einer Umfrage."); }
+		if(sender.hasPermission("Veto.edit.remove.vote") && (cmd.equals("all") || cmd.equals("edit-vote-r"))) { sender.sendMessage(ChatColor.AQUA + "/veto edit -r vote <Umfrage> \" <Antwort> \":" + ChatColor.GOLD + " Löscht eine Anwort."); }
+		if(sender.hasPermission("Veto.edit.add.player") && (cmd.equals("all") || cmd.equals("edit-player-a"))) { sender.sendMessage(ChatColor.AQUA + "/veto edit -a player <Umfrage> <Name>:" + ChatColor.GOLD + " Fügt einen Spieler zur Spielerliste einer Umfrage hinzu."); }
+		if(sender.hasPermission("Veto.edit.remove.player") && (cmd.equals("all") || cmd.equals("edit-player-r"))) { sender.sendMessage(ChatColor.AQUA + "/veto edit -e player <Umfrage> <Name>:" + ChatColor.GOLD + " Löscht einene Spieler aus der Spielerliste einer Umfrage."); }
 	}
 }

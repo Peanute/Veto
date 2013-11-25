@@ -10,7 +10,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.help.HelpTopicComparator.TopicNameComparator;
 
 public class Umfrage {
 	
@@ -82,7 +81,7 @@ public class Umfrage {
 	}
 	
 	public void printUmfrage(CommandSender sender) {
-		sender.sendMessage(ChatColor.BLUE + "Umfrage: " + this.name);
+		sender.sendMessage(ChatColor.BOLD + "Umfrage: " + this.name);
 		for(String s : thema) {
 			sender.sendMessage(ChatColor.GREEN + s);
 		}
@@ -101,11 +100,12 @@ public class Umfrage {
 	}
 	
 	public void shortPrint(CommandSender sender) {
-		sender.sendMessage((started?ChatColor.GREEN:ChatColor.RED) + "(" + name + "): "+ ChatColor.GOLD + thema.toArray()[0]);
+		sender.sendMessage(ChatColor.BOLD + "Folgende Umfragen sind verfügbar");
+		sender.sendMessage(ChatColor.GOLD + "(" + (started?ChatColor.GREEN:ChatColor.RED) + name + ChatColor.GOLD + "): " + thema.get(0));
 	}
 	
 	public void printStat(CommandSender sender) {
-		sender.sendMessage(ChatColor.BLUE + "Statistiken für " + name);
+		sender.sendMessage(ChatColor.BOLD + "Statistiken für " + name);
 		int i = 1;
 		for(String s : votes.keySet()) {
 			sender.sendMessage(ChatColor.AQUA.toString() + i + ". : " + s + ": " + votes.get(s) + " (" + nf.format(Double.valueOf((Integer)votes.get(s)) / Double.valueOf(countVotes()) * 100.0D) + "%)");
@@ -147,6 +147,10 @@ public class Umfrage {
 	
 	public boolean getAutoEnd() {
 		return autoEnd;
+	}
+	
+	public void setAutoEnd(Boolean ende) {
+		this.autoEnd = ende;
 	}
 	
 	public void start() {
@@ -191,4 +195,44 @@ public class Umfrage {
 		return multipleChoice;
 	}
 	
+	public boolean addPlayer(String player) {
+		if(playerList.contains(player)) { return false; }
+		playerList.add(player);
+		plugin.reload();
+		return true;
+	}
+	
+	public void editVoteAdd(String vote, Integer count) {
+		votes.put(vote, count);
+		plugin.reload();
+	}
+	
+	public void editVoteRemove(String name, String key) {
+		votes.remove(key);
+		plugin.reload();
+	}
+	
+	public boolean editPlayerRemove(String name, String player) {
+		if(!playerList.contains(player)) { return false; }
+		playerList.remove(player);
+		plugin.reload();
+		return true;
+	}
+	
+	public void editTopic(String name, String topic, Integer line) {
+		line-=1;
+		if(topic.equals("")) {
+			thema.set(line, topic);
+			thema.remove((int)line);
+			plugin.reload();
+			return;
+		}
+		if(!(thema.size()<=line)) {
+			thema.set(line, topic);
+			plugin.reload();
+		} else {
+			thema.add(topic);
+			plugin.reload();
+		}
+	}
 }
