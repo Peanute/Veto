@@ -5,14 +5,16 @@
 /veto info <umfrage>
 /veto info playerlist <umfrage>
 /veto list <umfrage>
-/veto edit add vote <umfrage> " <antwort> " <anzahl>
+/veto edit -a vote <umfrage> " <antwort> " <anzahl>
+/veto edit -r vote <umfrage> " <antwort> "
 /veto stat <umfrage>
-/veto edit add player <umfrage> <spielername>
+/veto edit -a player <umfrage> <spielername>
+/veto edit -r player <umfrage> <spielername>
 /veto vote <umfrage> <nummer>
 /veto vote <umfrage> [nummern]
 /veto start <umfrage>
 /veto end <umfrage>
-/veto edit autooff <umfrage> <true/false>
+/veto edit ao <umfrage> <true/false>
 /veto edit end <umfrage> " <datum> "
 -> 01/01/1990 00:00 oder 01/01/1990 oder 1 Jan 1990
 /veto delete <umfrage>
