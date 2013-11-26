@@ -35,7 +35,7 @@ english:
     help-perm: 'Only the commands for your rights are displayed'
     help-base: ' Basic command.'
     help-reload: ' Loads the config and the surveys from the specified folder manually.'
-    help-info: ' Displays the currently loaded Polls. Â§cRed Â§6= not started, Â§cGreen Â§6= started.'
+    help-info: ' Displays the currently loaded Polls. §cRed §6= not started, §aGreen §6= started.'
     help-info-spec: ' Displays the details of the surveys.'
     help-playerlist: ' Displays the players which have already voted.'
     help-list: ' Displays a list of surveys with the first line of the topic.'

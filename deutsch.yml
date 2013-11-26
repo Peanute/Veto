@@ -35,7 +35,7 @@ deutsch:
     help-perm: 'Es werden nur die Befehle für deine Rechte angezeigt'
     help-base: ' Basis Befehl.'
     help-reload: ' Lädt die config und die Umfragen aus dem angegebenen Ordner manuell neu.'
-    help-info: ' Zeigt die aktuell geladenen Umfragen an. §cRot §6= nicht gestartet, §cGrün §6= gestartet.'
+    help-info: ' Zeigt die aktuell geladenen Umfragen an. §cRot §6= nicht gestartet, §aGrün §6= gestartet.'
     help-info-spec: ' Zeigt die Details der Umfrage an.'
     help-playerlist: ' Zeigt die Spieler an, welche bereits abgestimmt haben.'
     help-list: ' Zeigt eine Liste der Umfragen mit der ersten Zeile des Themas.'
