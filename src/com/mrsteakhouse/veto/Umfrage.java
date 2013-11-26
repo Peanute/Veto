@@ -54,7 +54,7 @@ public class Umfrage {
 	}
 	
 	public boolean addVote(Integer answer, String name) {
-		if(playerList.contains(name)) { return false; } 
+		if(playerList.contains(name)) { return false; }
 		Object[] sArray = votes.keySet().toArray();
 		String s = (String)sArray[answer-1];
 		Integer count = (Integer)votes.get(s)+1;
@@ -63,12 +63,11 @@ public class Umfrage {
 		return true;
 	}
 	
-	public boolean addMulVote(Integer[] answers, String name) {
-		if(playerList.contains(name)) { return false;}
-		
+	public boolean addMulVote(Integer[] answer, String name) {
+		if(playerList.contains(name)) { return false; }
 		Object[] sArray = votes.keySet().toArray();
-		for(Integer answer : answers) {
-			String s = (String)sArray[answer-1];
+		for(Integer i : answer) {
+			String s = (String)sArray[i-1];
 			Integer count = (Integer)votes.get(s)+1;
 			votes.put(s, count);
 		}
@@ -81,42 +80,42 @@ public class Umfrage {
 	}
 	
 	public void printUmfrage(CommandSender sender) {
-		sender.sendMessage(ChatColor.BOLD + "Umfrage: " + this.name);
+		sender.sendMessage(ChatColor.BOLD + String.valueOf(plugin.getLanguageData().get("u-print-top")) + this.name);
 		for(String s : thema) {
 			sender.sendMessage(ChatColor.GREEN + s);
 		}
-		sender.sendMessage(ChatColor.GOLD + "Mögliche Antworten: ");
+		sender.sendMessage(ChatColor.GOLD + String.valueOf(plugin.getLanguageData().get("u-print-answers")));
 		int i = 1;
 		for(String s : votes.keySet()) {
 			sender.sendMessage(ChatColor.AQUA.toString() + i + ". : " + s);
 			i++;
 		}
-		sender.sendMessage(ChatColor.YELLOW + "Gestartet: " + (started ? "Ja" : "Nein"));
-		sender.sendMessage(ChatColor.YELLOW + "Endet am: " + estEnde);
-		sender.sendMessage(ChatColor.YELLOW + "Autom. Ende: " + (autoEnd ? "Ja" : "Nein"));
-		sender.sendMessage(ChatColor.YELLOW + "Multiple Choice: " + (multipleChoice ? "Ja" : "Nein"));
+		sender.sendMessage(ChatColor.YELLOW + String.valueOf(plugin.getLanguageData().get("u-print-startet")) + (started ? String.valueOf(plugin.getLanguageData().get("u-print-no")) : String.valueOf(plugin.getLanguageData().get("u-print-yes"))));
+		sender.sendMessage(ChatColor.YELLOW + String.valueOf(plugin.getLanguageData().get("u-print-enddate")) + estEnde);
+		sender.sendMessage(ChatColor.YELLOW + String.valueOf(plugin.getLanguageData().get("u-print-ao")) + (autoEnd ? String.valueOf(plugin.getLanguageData().get("u-print-no")) : String.valueOf(plugin.getLanguageData().get("u-print-yes"))));
+		sender.sendMessage(ChatColor.YELLOW + String.valueOf(plugin.getLanguageData().get("u-print-mp")) + (multipleChoice ? String.valueOf(plugin.getLanguageData().get("u-print-yes")) : String.valueOf(plugin.getLanguageData().get("u-print-no"))));
 		sender.sendMessage(ChatColor.YELLOW + "Permissions: " + perm);
-		if(sender instanceof Player) { sender.sendMessage(ChatColor.RED + "Du hast " + (playerList.contains(sender.getName()) ? "bereits" : "noch nicht") + " abgestimmt."); }
+		if(sender instanceof Player) { sender.sendMessage(ChatColor.RED + String.valueOf(plugin.getLanguageData().get("u-voted-top")) + (playerList.contains(sender.getName()) ? String.valueOf(plugin.getLanguageData().get("u-voted-yes")) : String.valueOf(plugin.getLanguageData().get("u-voted-no"))) + String.valueOf(plugin.getLanguageData().get("u-voted-bot"))); }
 	}
 	
 	public void shortPrint(CommandSender sender) {
-		sender.sendMessage(ChatColor.BOLD + "Folgende Umfragen sind verfügbar");
-		sender.sendMessage(ChatColor.GOLD + "(" + (started?ChatColor.GREEN:ChatColor.RED) + name + ChatColor.GOLD + "): " + thema.get(0));
+		sender.sendMessage(ChatColor.BOLD + String.valueOf(plugin.getLanguageData().get("u-sprint-top")));
+		sender.sendMessage(ChatColor.GOLD + "(" + (started?ChatColor.GREEN:ChatColor.DARK_RED) + name + ChatColor.GOLD + "): " + thema.get(0));
 	}
 	
 	public void printStat(CommandSender sender) {
-		sender.sendMessage(ChatColor.BOLD + "Statistiken für " + name);
+		sender.sendMessage(ChatColor.BOLD + String.valueOf(plugin.getLanguageData().get("u-stat-top")) + name);
 		int i = 1;
 		for(String s : votes.keySet()) {
 			sender.sendMessage(ChatColor.AQUA.toString() + i + ". : " + s + ": " + votes.get(s) + " (" + nf.format(Double.valueOf((Integer)votes.get(s)) / Double.valueOf(countVotes()) * 100.0D) + "%)");
 			i++;
 		}
-		sender.sendMessage(ChatColor.YELLOW + "Es wurde insgesamt " + countVotes() + " mal abgestimmt.");
+		sender.sendMessage(ChatColor.YELLOW + String.valueOf(plugin.getLanguageData().get("u-stat-bot1")) + countVotes() + String.valueOf(plugin.getLanguageData().get("u-stat-bot2")));
 	}
 	
 	public void printPlayerlist(CommandSender sender) {
 		if(!playerList.isEmpty()) {
-			sender.sendMessage(ChatColor.GREEN + "Es haben folgende Spieler abegestimmt:");
+			sender.sendMessage(ChatColor.GREEN + String.valueOf(plugin.getLanguageData().get("u-pList-cont")));
 			String msg="";
 			int i = 1;
 			for(String ply : playerList) {
@@ -125,7 +124,7 @@ public class Umfrage {
 			}
 			sender.sendMessage(ChatColor.GOLD + msg);
 		} else {
-			sender.sendMessage(ChatColor.RED + "Es hat noch niemand abgestimmt.");
+			sender.sendMessage(ChatColor.DARK_RED + String.valueOf(plugin.getLanguageData().get("u-pList-not")));
 		}
 	}
 	
@@ -155,12 +154,12 @@ public class Umfrage {
 	
 	public void start() {
 		started = true;
-		Bukkit.getServer().broadcastMessage(ChatColor.GREEN + "Die Umfrage " + ChatColor.RED + name + ChatColor.GREEN + " wurde gestartet.");
+		Bukkit.getServer().broadcastMessage(ChatColor.GREEN + String.valueOf(plugin.getLanguageData().get("u-startend")) + ChatColor.DARK_RED + name + ChatColor.GREEN + String.valueOf(plugin.getLanguageData().get("u-start")));
 	}
 	
 	public void end() {
 		started = false;
-		Bukkit.getServer().broadcastMessage(ChatColor.GREEN + "Die Umfrage " + ChatColor.RED + name + ChatColor.GREEN + " wurde beendet.");
+		Bukkit.getServer().broadcastMessage(ChatColor.GREEN + String.valueOf(plugin.getLanguageData().get("u-startend")) + ChatColor.DARK_RED + name + ChatColor.GREEN + String.valueOf(plugin.getLanguageData().get("u-end")));
 	}
 	
 	public Integer countVotes() {

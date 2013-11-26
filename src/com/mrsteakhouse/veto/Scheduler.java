@@ -26,7 +26,7 @@ public class Scheduler implements Runnable {
 				for(Umfrage u : umfrageList) {
 					u.end();
 				}
-				Bukkit.broadcastMessage(ChatColor.RED + "All surveys were closed!");
+				Bukkit.broadcastMessage(ChatColor.DARK_RED +  String.valueOf(plugin.getLanguageData().get("sch-allClosed")));
 			}
 		}
 		for(Umfrage u : umfrageList) {

@@ -1,8 +1,6 @@
 default:
   topic:
-  - test
-  - test
-  - test
+  - 'default survey'
   votes: {}
   started: false
   estEnde: 01/01/1990 00:00

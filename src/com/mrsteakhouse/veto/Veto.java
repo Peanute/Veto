@@ -2,6 +2,7 @@ package com.mrsteakhouse.veto;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -14,12 +15,16 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.google.common.collect.Maps;
+
 public class Veto extends JavaPlugin{
 	private List<Umfrage> UmfrageList = new ArrayList<Umfrage>();
 	private String root;
 	private boolean autoEnd;
 	private String uPath;
 	private String autoEndDate;
+	private String language;
+	private Map<String, Object> languageData = Maps.newHashMap();
 	
 	public Veto() {
 		
@@ -34,7 +39,8 @@ public class Veto extends JavaPlugin{
 			e.printStackTrace();
 		}
 		loadUmfragen();
-		Bukkit.getLogger().log(Level.INFO,"[Veto] " + UmfrageList.size() + " Umfragen geladen!");
+		loadLanguage();
+		Bukkit.getLogger().log(Level.INFO,"[Veto] " + UmfrageList.size() + languageData.get("onLoad-msg"));
 		
 		getCommand("veto").setExecutor(new CommandHandler(this));
 		Bukkit.getScheduler().scheduleAsyncRepeatingTask(this, new Scheduler(this, UmfrageList), 120L, 18000L);
@@ -61,6 +67,7 @@ public class Veto extends JavaPlugin{
 		autoEnd = cs.getBoolean("auto-end");
 		uPath = cs.getString("pollfolder");
 		autoEndDate = cs.getString("auto-end-date");
+		language = cs.getString("language");
 		
 	}
 	
@@ -94,7 +101,7 @@ public class Veto extends JavaPlugin{
 		
 		if(!folder.exists()) {
 			folder.mkdir();
-			Bukkit.getLogger().log(Level.INFO, "Keine Umfragen in diesem Ordner vorhanden!");
+			Bukkit.getLogger().log(Level.INFO, (String) languageData.get("onLoad-nosurveys"));
 			return false;
 		}
 		
@@ -119,6 +126,33 @@ public class Veto extends JavaPlugin{
 			UmfrageList.add(temp);
 		}
 		return true;
+	}
+	
+	public void loadLanguage() {
+		File file = new File(root, language + ".yml");
+		InputStream is;
+		FileConfiguration datei;
+		
+		if(!file.exists()) {
+			language = "deutsch";
+			Bukkit.getLogger().log(Level.INFO, "Keine Sprachdatei gefunden, wechsle zu Detusch...");
+			is = getResource("deutsch.yml");
+			datei = YamlConfiguration.loadConfiguration(is);
+			ConfigurationSection cs = datei.getConfigurationSection(language);
+			languageData = cs.getConfigurationSection("values").getValues(false);
+		}
+		else {
+			datei = YamlConfiguration.loadConfiguration(file);
+			ConfigurationSection cs = datei.getConfigurationSection(language);
+			languageData = cs.getConfigurationSection("values").getValues(false);
+		}
+
+		try {
+			datei.save(file);
+		} catch (IOException e) {
+			Bukkit.getLogger().log(Level.INFO, "Fehler beim speichern der Datei!");
+			e.printStackTrace();
+		}
 	}
 	
 	public void createUmfrage(String name, String perm) {
@@ -169,5 +203,9 @@ public class Veto extends JavaPlugin{
 			}
 		}
 		return null;
+	}
+	
+	public Map<String, Object> getLanguageData() {
+		return languageData;
 	}
 }
