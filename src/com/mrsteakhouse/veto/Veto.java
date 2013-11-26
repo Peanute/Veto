@@ -178,11 +178,18 @@ public class Veto extends JavaPlugin{
 	}
 	
 	public void reload() {
+		loadLanguage();
 		try {
 			loadConfig(this);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		saveUmfragen();
+		UmfrageList.clear();
+		loadUmfragen();
+	}
+	
+	public void reloadUmfragen() {
 		saveUmfragen();
 		UmfrageList.clear();
 		loadUmfragen();

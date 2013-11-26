@@ -197,13 +197,13 @@ public class Umfrage {
 	public boolean addPlayer(String player) {
 		if(playerList.contains(player)) { return false; }
 		playerList.add(player);
-		plugin.reload();
+		plugin.reloadUmfragen();
 		return true;
 	}
 	
 	public void editVoteAdd(String vote, Integer count) {
 		votes.put(vote, count);
-		plugin.reload();
+		plugin.reloadUmfragen();
 	}
 	
 	public boolean editVoteRemove(Integer key) {
@@ -221,7 +221,7 @@ public class Umfrage {
 	public boolean editPlayerRemove(String name, String player) {
 		if(!playerList.contains(player)) { return false; }
 		playerList.remove(player);
-		plugin.reload();
+		plugin.reloadUmfragen();
 		return true;
 	}
 	
@@ -236,7 +236,7 @@ public class Umfrage {
 				thema.set(line, "");
 				thema.remove((int)line);
 			}
-			plugin.reload();
+			plugin.reloadUmfragen();
 			return;
 		}
 		if(!(thema.size()<=line)) {
@@ -244,7 +244,7 @@ public class Umfrage {
 		} else {
 			thema.add(topic);
 		}
-		plugin.reload();
+		plugin.reloadUmfragen();
 	}
 	
 	public boolean editVoteCount(Integer key, Integer count) {
