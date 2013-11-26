@@ -3,3 +3,4 @@ veto:
   pollfolder: ./plugins/veto/surveys
   auto-end: false
   auto-end-date: 01/01/1990 00:00
+  language: english

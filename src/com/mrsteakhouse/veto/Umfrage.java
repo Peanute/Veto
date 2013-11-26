@@ -99,7 +99,7 @@ public class Umfrage {
 	}
 	
 	public void shortPrint(CommandSender sender) {
-		sender.sendMessage(ChatColor.BOLD + String.valueOf(plugin.getLanguageData().get("u-sprint-top")));
+		sender.sendMessage(ChatColor.BOLD + String.valueOf(plugin.getLanguageData().get("ch-infotopic")));
 		sender.sendMessage(ChatColor.GOLD + "(" + (started?ChatColor.GREEN:ChatColor.DARK_RED) + name + ChatColor.GOLD + "): " + thema.get(0));
 	}
 	

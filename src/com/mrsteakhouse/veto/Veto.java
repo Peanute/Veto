@@ -48,8 +48,8 @@ public class Veto extends JavaPlugin{
 	
 	@Override
 	public void onDisable() {
+		getServer().getScheduler().cancelTasks(this);
 		saveUmfragen();
-		saveConfig();
 		
 	}
 	
@@ -134,23 +134,19 @@ public class Veto extends JavaPlugin{
 		FileConfiguration datei;
 		
 		if(!file.exists()) {
-			language = "deutsch";
-			Bukkit.getLogger().log(Level.INFO, "Keine Sprachdatei gefunden, wechsle zu Detusch...");
-			is = getResource("deutsch.yml");
+			is = getResource(language + ".yml");
 			datei = YamlConfiguration.loadConfiguration(is);
-			ConfigurationSection cs = datei.getConfigurationSection(language);
-			languageData = cs.getConfigurationSection("values").getValues(false);
 		}
 		else {
 			datei = YamlConfiguration.loadConfiguration(file);
-			ConfigurationSection cs = datei.getConfigurationSection(language);
-			languageData = cs.getConfigurationSection("values").getValues(false);
 		}
+		ConfigurationSection cs = datei.getConfigurationSection(language);
+		languageData = cs.getConfigurationSection("values").getValues(false);
 
 		try {
 			datei.save(file);
 		} catch (IOException e) {
-			Bukkit.getLogger().log(Level.INFO, "Fehler beim speichern der Datei!");
+			Bukkit.getLogger().log(Level.INFO, String.valueOf(languageData.get("onReload-saveerr")));
 			e.printStackTrace();
 		}
 	}
@@ -192,6 +188,13 @@ public class Veto extends JavaPlugin{
 	public void reloadUmfragen() {
 		saveUmfragen();
 		UmfrageList.clear();
+		try {
+			loadConfig(this);
+		} catch (Exception e) {
+			getLogger().log(Level.INFO, "Failed to load config!");
+			e.printStackTrace();
+		}
+		loadLanguage();
 		loadUmfragen();
 	}
 	
