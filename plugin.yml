@@ -86,6 +86,7 @@ permissions:
       Veto.edit.add.player: true
       Veto.edit.remove.vote: true
       Veto.edit.remove.player: true
+      Veto.edit.vote.count: true
       
   Veto.edit.all:
     description: Group for editing permissions.
@@ -95,10 +96,11 @@ permissions:
       Veto.edit.perm: true
       Veto.edit.end: true
       Veto.edit.autooff: true
-      Veto.edit.add.vote: true
-      Veto.edit.add.player: true
-      Veto.edit.remove.vote: true
-      Veto.edit.remove.player: true
+      Veto.edit.vote.add: true
+      Veto.edit.player.add: true
+      Veto.edit.vote.remove: true
+      Veto.edit.player.remove: true
+      Veto.edit.vote.count: true
       
   Veto.edit.vote.*:
     description: Global rights to remove player or answers.
