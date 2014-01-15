@@ -21,12 +21,12 @@ public class Umfrage {
 	private String estEnde;
 	private boolean autoEnd;
 	private String perm;
-	private boolean multipleChoice;
+	private Integer multipleChoice;
 	private List<String> playerList;
 	private NumberFormat nf = NumberFormat.getInstance();
 	
 	
-	public Umfrage(Veto plugin, String name, List<String> thema, Map<String, Object> votes, boolean started, String estEnde, boolean autoEnd, List<String> playerList, String perm, boolean multipleChoice) {
+	public Umfrage(Veto plugin, String name, List<String> thema, Map<String, Object> votes, boolean started, String estEnde, boolean autoEnd, List<String> playerList, String perm, Integer multipleChoice) {
 		this.name = name;
 		this.thema = thema;
 		this.votes = votes;
@@ -36,6 +36,7 @@ public class Umfrage {
 		this.autoEnd = autoEnd;
 		this.playerList = playerList;
 		this.multipleChoice = multipleChoice;
+		this.perm = perm;
 		nf.setMaximumFractionDigits(2);
 	}
 	
@@ -48,28 +49,24 @@ public class Umfrage {
 		this.estEnde = "01/01/1990 00:00";
 		this.autoEnd = false;
 		this.playerList = new ArrayList<String>();
-		this.multipleChoice = false;
+		this.multipleChoice = 1;
+		this.perm = perm;
 		nf.setMaximumFractionDigits(2);
 		
 	}
 	
-	public boolean addVote(Integer answer, String name) {
+	public boolean addVote(Integer[] answer, String name) {
 		if(playerList.contains(name)) { return false; }
 		Object[] sArray = votes.keySet().toArray();
-		String s = (String)sArray[answer-1];
-		Integer count = (Integer)votes.get(s)+1;
-		votes.put(s, count);
-		playerList.add(name);
-		return true;
-	}
-	
-	public boolean addMulVote(Integer[] answer, String name) {
-		if(playerList.contains(name)) { return false; }
-		Object[] sArray = votes.keySet().toArray();
+		int anzahl = 0;
 		for(Integer i : answer) {
+			if(anzahl >= multipleChoice) {
+				break;
+			}
 			String s = (String)sArray[i-1];
 			Integer count = (Integer)votes.get(s)+1;
 			votes.put(s, count);
+			anzahl++;
 		}
 		playerList.add(name);
 		return true;
@@ -93,14 +90,15 @@ public class Umfrage {
 		sender.sendMessage(ChatColor.YELLOW + String.valueOf(plugin.getLanguageData().get("u-print-startet")) + (started ? String.valueOf(plugin.getLanguageData().get("u-print-no")) : String.valueOf(plugin.getLanguageData().get("u-print-yes"))));
 		sender.sendMessage(ChatColor.YELLOW + String.valueOf(plugin.getLanguageData().get("u-print-enddate")) + estEnde);
 		sender.sendMessage(ChatColor.YELLOW + String.valueOf(plugin.getLanguageData().get("u-print-ao")) + (autoEnd ? String.valueOf(plugin.getLanguageData().get("u-print-no")) : String.valueOf(plugin.getLanguageData().get("u-print-yes"))));
-		sender.sendMessage(ChatColor.YELLOW + String.valueOf(plugin.getLanguageData().get("u-print-mp")) + (multipleChoice ? String.valueOf(plugin.getLanguageData().get("u-print-yes")) : String.valueOf(plugin.getLanguageData().get("u-print-no"))));
+		sender.sendMessage(ChatColor.YELLOW + String.valueOf(plugin.getLanguageData().get("u-print-mp")) + String.valueOf(this.multipleChoice));
 		sender.sendMessage(ChatColor.YELLOW + "Permissions: " + perm);
 		if(sender instanceof Player) { sender.sendMessage(ChatColor.RED + String.valueOf(plugin.getLanguageData().get("u-voted-top")) + (playerList.contains(sender.getName()) ? String.valueOf(plugin.getLanguageData().get("u-voted-yes")) : String.valueOf(plugin.getLanguageData().get("u-voted-no"))) + String.valueOf(plugin.getLanguageData().get("u-voted-bot"))); }
 	}
 	
 	public void shortPrint(CommandSender sender) {
-		sender.sendMessage(ChatColor.BOLD + String.valueOf(plugin.getLanguageData().get("ch-infotopic")));
-		sender.sendMessage(ChatColor.GOLD + "(" + (started?ChatColor.GREEN:ChatColor.DARK_RED) + name + ChatColor.GOLD + "): " + thema.get(0));
+		if(!this.thema.isEmpty()) {
+			sender.sendMessage(ChatColor.GOLD + "(" + (started?ChatColor.GREEN:ChatColor.DARK_RED) + name + ChatColor.GOLD + "): " + thema.get(0));
+		}
 	}
 	
 	public void printStat(CommandSender sender) {
@@ -186,11 +184,11 @@ public class Umfrage {
 		this.perm = perm;
 	}
 	
-	public void setMulChoice(boolean mChoice) {
+	public void setMulChoice(Integer mChoice) {
 		this.multipleChoice = mChoice;
 	}
 	
-	public boolean getMulChoice() {
+	public Integer getMulChoice() {
 		return multipleChoice;
 	}
 	

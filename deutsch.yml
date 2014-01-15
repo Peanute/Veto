@@ -63,7 +63,7 @@ deutsch:
     u-print-no: 'Nein'
     u-print-enddate: 'Endet am: '
     u-print-ao: 'Autom. Ende: '
-    u-print-mp: 'Multiple Choice: '
+    u-print-mp: 'Anwortmöglichkeiten: '
     u-stat-top: 'Statistiken für '
     u-stat-bot1: 'Es wurde insgesamt '
     u-stat-bot2: ' mal abgestimmt.'

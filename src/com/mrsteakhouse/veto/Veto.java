@@ -44,6 +44,13 @@ public class Veto extends JavaPlugin{
 		
 		getCommand("veto").setExecutor(new CommandHandler(this));
 		Bukkit.getScheduler().scheduleAsyncRepeatingTask(this, new Scheduler(this, UmfrageList), 120L, 18000L);
+		
+		try {
+			new Metrics(this).start();
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@Override
@@ -119,7 +126,7 @@ public class Veto extends JavaPlugin{
 			String perm = cs.getString("perm");
 			List<String> topic = cs.getStringList("topic");
 			List<String> playerList = cs.getStringList("player");
-			boolean mulChoice = cs.getBoolean("mul-choice");
+			Integer mulChoice = cs.getInt("mul-choice");
 			Map<String, Object> votes = cs.getConfigurationSection("votes").getValues(false);
 
 			Umfrage temp = new Umfrage(this, name, topic, votes, started, estEnde, uautoEnd, playerList, perm, mulChoice);

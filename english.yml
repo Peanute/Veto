@@ -63,7 +63,7 @@ english:
     u-print-no: 'No'
     u-print-enddate: 'Ends at: '
     u-print-ao: 'Automatic end: '
-    u-print-mp: 'Multiple choice: '
+    u-print-mp: 'Possible answer count: '
     u-stat-top: 'Statistics for '
     u-stat-bot1: 'It was voted a total of '
     u-stat-bot2: ' times.'
