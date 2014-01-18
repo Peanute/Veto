@@ -116,6 +116,7 @@ permissions:
     children:
       Veto.edit.vote.add: true
       Veto.edit.vote.remove: true
+      Veto.edit.vote.count: true
       
   Veto.edit.player.*:
     description: Deprecated. Use Veto.edit.player.all instead.
